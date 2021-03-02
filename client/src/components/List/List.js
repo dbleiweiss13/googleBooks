@@ -9,32 +9,36 @@ function List(props) {
         window.location.href = e.target.getAttribute("data-url")
     }
 
-    function saveBook() {
+    function saveBook(event) {
+        let index = event.target.getAttribute("data-index")
+
         let newBook = {
-            title: document.getElementById('title').innerHTML,
-            author: document.getElementById('author').innerHTML,
-            description: document.getElementById('description').innerHTML,
-            image: document.getElementById('image').getAttribute("src"),
-            link: document.getElementById('title').getAttribute("data-url")
+            title: document.getElementById('title' + index).innerHTML,
+            author: document.getElementById('author' + index).innerHTML,
+            description: document.getElementById('description' + index).innerHTML,
+            image: document.getElementById('image' + index).getAttribute("src"),
+            link: document.getElementById('title' + index).getAttribute("data-url")
         }
 
-        API.saveBook(newBook)
-        window.location.href ="/saved"
+        API.saveBook(newBook).then(() => {
+            window.location.href ="/saved"
+        })
 
     }
     
     return (
         <div className="container">
-            {props.books.items ? props.books.items.map(e => {
+            {props.books.items ? props.books.items.map((e,i) => {
 
                 let link = e.volumeInfo.imageLinks ? e.volumeInfo.imageLinks.thumbnail : "https://media.istockphoto.com/photos/blank-book-cover-isolated-on-white-picture-id478720334?k=6&m=478720334&s=612x612&w=0&h=TTN16jGbgtRC4xpW_F3eWHFdZjqQul_gKm5pcPFcabw="
-                
+                let author = e.volumeInfo.authors ? e.volumeInfo.authors[0] : "No Author Listed"
+
                 return(
-                    <BookCard 
+                    <BookCard
+                        i={i} 
                         title={e.volumeInfo.title}
-                        author={e.volumeInfo.authors}
-                        checkLink={e.volumeInfo.imageLinks}
-                        link={link}
+                        author={author}
+                        image={link}
                         description={e.volumeInfo.description}
                         url={e.volumeInfo.previewLink}
                         viewBook={viewBook}
