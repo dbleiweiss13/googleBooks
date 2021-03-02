@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from 'react'
 import API from "../../utils/API"
 import "./List.css"
+import BookCard from "../BookCard/BookCard"
 
 function List(props) {
 
     function viewBook(e) {
-        console.log(e.target.getAttribute("data-url"))
+        window.location.href = e.target.getAttribute("data-url")
     }
 
     function saveBook() {
@@ -17,30 +18,28 @@ function List(props) {
             link: document.getElementById('title').getAttribute("data-url")
         }
 
-        console.log(newBook)
         API.saveBook(newBook)
+        window.location.href ="/saved"
+
     }
     
     return (
         <div className="container">
             {props.books.items ? props.books.items.map(e => {
+
+                let link = e.volumeInfo.imageLinks ? e.volumeInfo.imageLinks.thumbnail : "https://media.istockphoto.com/photos/blank-book-cover-isolated-on-white-picture-id478720334?k=6&m=478720334&s=612x612&w=0&h=TTN16jGbgtRC4xpW_F3eWHFdZjqQul_gKm5pcPFcabw="
+                
                 return(
-                    <div className="row">
-                        <div className="card bookCard">
-                            <div className="card-body">
-                                <h3 id="title" className="card-title">{e.volumeInfo.title}</h3>
-                                <p id="author" className="card-text">{e.volumeInfo.authors ? e.volumeInfo.authors[0] : "No Author Listed"}</p>
-                                <div className="bookContent">
-                                    <div>
-                                        <img id="image" className="image-style img-fluid" src={e.volumeInfo.imageLinks ? e.volumeInfo.imageLinks.thumbnail : "https://media.istockphoto.com/photos/blank-book-cover-isolated-on-white-picture-id478720334?k=6&m=478720334&s=612x612&w=0&h=TTN16jGbgtRC4xpW_F3eWHFdZjqQul_gKm5pcPFcabw="} />
-                                    </div>
-                                    <p id="description">{e.volumeInfo.description}</p>
-                                </div>
-                                <button id="link" onClick={viewBook} data-url={e.volumeInfo.previewLink} className="btn btn-primary buttons">view</button>
-                                <button onClick={saveBook} className="btn btn-primary buttons">Save</button>
-                            </div>
-                            </div>
-                    </div>
+                    <BookCard 
+                        title={e.volumeInfo.title}
+                        author={e.volumeInfo.authors}
+                        checkLink={e.volumeInfo.imageLinks}
+                        link={link}
+                        description={e.volumeInfo.description}
+                        url={e.volumeInfo.previewLink}
+                        viewBook={viewBook}
+                        saveBook={saveBook}
+                    />
                 )
             }) : <></>}
         </div>
