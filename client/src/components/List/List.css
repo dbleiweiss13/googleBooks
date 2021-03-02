@@ -1,0 +1,24 @@
+.bookCard {
+    margin: 20px 0px;
+    width: 100%;
+}
+
+.buttons {
+    width: 70px;
+    margin-right: 20px;
+}
+
+.bookContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bookContent > p {
+    width: calc(100% - 220px);
+}
+
+.image-style {
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
+}
